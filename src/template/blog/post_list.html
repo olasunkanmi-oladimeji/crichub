@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}| Post list{% endblock %}
+{% load account %}
+{% block content %}
+
+  <!-- Main Content -->
+  <div class="container mt-5 pt-5">
+    <div class="row mt-3">
+      <div class="col-lg-12 col-md-10 mx-auto">
+
+<table class="table">
+    <thead>
+      <tr class="bg-light">
+        <th scope="col">#</th>
+        <th scope="col">Post Title</th>
+        <th scope="col">Author</th>
+        <th scope="col">Created Date</th>
+        <th scope="col">Published Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {% for post in posts %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a href="{% url 'blog:post_detail' id=post.id %}">{{post.title|safe|truncatewords:20}}</a></td>
+        <td>{{post.author}}</td>
+        <td><a href="{% url 'blog:post_detail' id=post.id %}">{{post.created_date}}</a></td>
+        <td><a href="{% url 'blog:post_detail' id=post.id %}">{{post.publish_date}}</a></td>
+        <td>
+          <a class="btn btn-danger" href="{% url 'blog:PostDelete' pk=post.pk  %}">Delete <i class="fas fa-trash-alt"></i></a>
+          <a class="btn btn-dark" href="{% url 'blog:PostUpdate' pk=post.pk %}">Update <i class="fas fa-edit"></i></a>
+          {% if not post.publish_date %}
+          <a class="btn btn-primary" href="{% url 'blog:post_approve' pk=post.pk %}">Publish Post <i class="fas fa-check-circle"></i></a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+      <a href="{% url 'blog:postCreate' %}" class="btn btn-primary">Create  Post</a>
+          
+      
+    </tbody>
+  </table>
+
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+
+{% endblock content %}

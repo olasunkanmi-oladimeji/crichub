@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block head_title %}| Delete Post{% endblock %}
+{% block content %}
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row mt-5 pt-5 ">
+        <div class="mt-5 pt-5">
+          
+          
+          
+          </div>
+            <div>
+                <form class="text-center" method="post">{% csrf_token %}
+                    <p>Are you sure you want to delete "{{ object }}"?</p>
+                    <input type="submit" class="btn-danger btn" value="Confirm">
+                    <a href="{% url 'blog:draft' %}" class="btn-defualt btn"> Cancel</a>
+                </form>
+                
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <hr>
+
+{% endblock content %}
+  

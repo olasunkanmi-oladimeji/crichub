@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}| create Post{% endblock %}
+{% load account %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+  <div class="container ">
+    <div class="row m-5">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        
+        <div class=" p-5">
+        <form method="Post" enctype="multipart/form-data" >
+          <center><h3>You Are Creating A New Post</h3></center>
+
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button style="width: 100%;" class="btn btn-outline-dark" type="submit">Create A Post</button>
+          
+      </form>
+      </div>
+        
+        </div>
+          
+        
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'css/custom.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/custom.js' %}" ></script>
+{% endblock content %}

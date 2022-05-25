@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}| {{post.content|safe|truncatewords:10}}{% endblock %}
+{% load account %}
+{% block content %}
+      <div class="container main">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="single-post">
+              <h1> <span class="blue-frame">{{post.title|safe}}</span></h1>
+              <div class="post-meta text-muted">
+                <span><i class="far fa-user"></i> Posted by {{post.author}}</span>
+                <span><img style="width: 20px;" src="{% static 'img/icon/calendar.svg' %}" alt=""> {{post.publish_date}}</span>
+                <span><i class="far fa-comment-alt"></i> {{ post.comments.count }} comments</span>
+              </div>
+              <div class="post-contant">
+                <div class="post-img"><img src="{{post.image.url}}" alt=""></div>
+                
+                <p>{{post.content|safe}}</p>
+                <figure class="">
+                  {% if post.video %}
+                  <video width="auto" height="280px" controls>
+                    <source src="{{post.video.url}}" type="video/mp4">
+                    <source src="{{post.video.url}}" type="video/ogg">
+                  Your browser does not support the video tag.
+                  </video>
+                  {% endif %}
+                </figure>
+
+                {% if user.is_authenticated and user.is_superuser %}
+         
+                <a href="#">
+                  <a class="btn btn-danger" href="{% url 'blog:PostDelete' pk=post.pk  %}">Delete <i class="fas fa-trash-alt"></i></a>
+                  <a class="btn btn-dark" href="{% url 'blog:PostUpdate' pk=post.pk %}">Update <i class="fas fa-edit"></i></a>
+                  
+                  {% if not post.publish_date %}
+                  <a class="btn btn-primary " href="{% url 'blog:post_approve' pk=post.pk %}">Publish Post <i class="fas fa-check-circle"></i></a>
+                  {% endif %}
+                    
+                
+                
+                {% endif %}
+               
+                <div class="line"> <hr></div>
+  
+                <form id="commentForm" method="post">
+                  {% csrf_token %}
+                  <!-- Message input -->
+                  <div class="mb-3">
+                    <label class="form-label" for="comment">Leave a Comment</label>
+                    <textarea name="body" class="form-control" id="comment" type="text" placeholder="" style="height: 3rem;" data-sb-validations="required"></textarea>
+                    <div class="invalid-feedback" data-sb-feedback="message:required">Comment is required.</div>
+                  </div>
+  
+                  <!-- Name input -->
+                  <div class="mb-3" style="display:none;">
+                    <input name="name" class="form-control" id="name" type="text" value="{% user_display user %}" placeholder="Name *" data-sb-validations="required" />
+                    <div class="invalid-feedback" data-sb-feedback="name:required">Name is required.</div>
+                  </div>
+              
+                  
+              
+              
+                  <!-- Form submit button -->
+                  <div class="d-grid">
+                    <button class="main-btn" id="submitButton" type="submit">Post Comment</button>
+                  </div>
+                </form>
+
+
+                {% for comment in post.comments.all %}
+
+
+                {% if user.is_authenticated and user.is_superuser or comment.approved_comment %}
+                <div class="comment" style="margin: 20px 0px 20px 20px;">
+                    <div class="date">
+
+                        {% if not comment.approved_comment %}
+                            <a class="btn btn-danger m-2" href="{% url 'blog:comment_remove' pk=comment.pk %}"><span class="fas fa-times"></span></a>
+                            <a class="btn btn-primary m-2" href="{% url 'blog:comment_approve' pk=comment.pk %}"><span class="fas fa-check"></span></a>
+                        {% endif %}
+                    </div>
+                    <hr>
+                    <strong>{{ user.username }}</strong><br>
+                    {{ comment.date_added }}
+                    <p>{{ comment.body|linebreaks }}</p>
+                </div>
+                <hr>
+
+                {% endif %}
+
+            {% empty %}
+                <p>No comments here yet :(</p>
+            {% endfor %}
+
+              </div>
+              
+            </div>
+
+            
+          </div>
+          <div class="sidebar col-lg-4">
+            <div class="input-group">
+              <div class="form-outline">
+                <input id="search-input" type="search" id="form1" class="form-control" placeholder="search" />
+              </div>
+              <button id="search-button" type="button" class="btn dark">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+
+            <div class="sidebar-category">
+              <h4>We take care of your business</h4>
+              <a href="">All category <img style="width: 20px; margin-left: 20px;" src="img/icon/arrow-right-icon.svg" alt=""></a>
+              <div class="category">
+                <div class="category-item">
+                  <img class="category-icon" src="img/icon/analytics.svg" alt="">
+                  <h6 class="category-title">Digital Analytics</h6>
+                  <p>Lorem Ipsum is simply dummy text of the printing </p>
+                  <a href=""><img style="width: 20px;" src="img/icon/arrow-right-icon.svg" alt=""></a>
+                </div>
+                <div class="category-item">
+                  <img class="category-icon" src="img/icon/marketing.svg" alt="">
+                  <h6 class="category-title">Digital  Marketing</h6>
+                  <p>Lorem Ipsum is simply dummy text of the printing </p>
+                  <a href=""><img style="width: 20px;" src="img/icon/arrow-right-icon.svg" alt=""></a>
+                </div>
+                <div class="category-item">
+                  <img class="category-icon" src="img/icon/email.svg" alt="">
+                  <h6 class="category-title">Email Marketing</h6>
+                  <p>Lorem Ipsum is simply dummy text of the printing </p>
+                  <a href=""><img style="width: 20px;" src="img/icon/arrow-right-icon.svg" alt=""></a>
+                </div>
+                <div class="category-item">
+                  <img class="category-icon" src="img/icon/analytics.svg" alt="">
+                  <h6 class="category-title">Corporate Identity</h6>
+                  <p>Lorem Ipsum is simply dummy text of the printing </p>
+                  <a href=""><img style="width: 20px;" src="img/icon/arrow-right-icon.svg" alt=""></a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="recent-posts my-5">
+              <h4>Our latest Articles</h4>
+              <a href="">All category <img style="width: 20px; margin-left: 20px;" src="img/icon/arrow-right-icon.svg" alt=""></a>
+            <div class="latest-articles-wrapper">
+              <div class="article">
+                <div class="arcticle-photo"><img src="img/post-1.png" alt=""></div>
+                <div class="article-text">
+                <a href="single-post.html"><h5 class="title">Develop Marketing</h5></a>
+                <p class="article-meta"><img src="img/icon/calendar.svg" alt=""><span class="data text-muted">August 24, 2021</span></p>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
+                </div>
+              </div>
+              <div class="article">
+                <div class="arcticle-photo"><img src="img/post-2.png" alt=""></div>  
+                <div class="article-text">
+                <a href="single-post.html"><h5 class="title">Resources Your Blog</h5></a>
+                <p class="article-meta"><img src="img/icon/calendar.svg" alt=""><span class="data text-muted">July 13, 2021</span></p>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
+                </div>
+              </div>
+              <div class="article">
+                <div class="arcticle-photo"><img src="img/post-3.png" alt=""></div>
+                <div class="article-text">
+                <a href="single-post.html"><h5 class="title">Know Your Audience</h5></a>
+                <p class="article-meta"><img src="img/icon/calendar.svg" alt=""><span class="data text-muted">April 18, 2021</span></p>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
+                </div>
+              </div>
+            </div>       
+          </div>
+          </div>
+        </div>
+      </div>
+
+
+
+{% endblock content %}

@@ -1,0 +1,138 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{%block content %}      
+      <main>
+        <div class="container">
+           <!-- Intro -->
+          <div class="intro text-center" >
+            <h1>Business Goal Achived with <br> <span class="blue-frame">Creative</span> Teams.</h1>
+            <p class="front-page">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been <br>
+              the industry's standard dummy text ever since the 1500s.</p>
+              <a href="#blog" class="main-btn">Blog</a>
+              <a href="/marketplace" class="blue-btn">Market Place</a>
+            <img src="" alt="">
+            
+          </div>
+
+          <div class="row" >
+            <div class="col-lg-8">
+              <div class="all-posts" id="blog">
+                {% for post in posts %}
+                <div class="post-item">
+                  <div class="post-img"><img src="{{post.image.url}}" alt=""></div>
+                  <div class="post-main-info">
+                    <h4>{{post.title}}</h4>
+                    <div class="post-meta text-muted">
+                  <span><i class="far fa-user"></i> Posted by {{post.author}}</span>
+                  <span><img style="width: 20px;" src="{% static 'img/icon/calendar.svg' %}" alt=""> {{post.publish_date}}</span>
+                  <span><i class="far fa-comment-alt"></i> 
+                    {% if post.comments  %}{{ post.comments.count }}{%else%}0{% endif %}  comments</span>
+                  </div>
+                    <p>{{post.content|safe|truncatewords:30|urlize}}....</p>
+                    <a href="{{post.get_absolute_url}}" class="main-btn">Read More</a>
+                  </div>
+                </div>
+                {% endfor %}
+                
+              </div>
+
+
+              <nav aria-label="blog navigation">
+                <ul class="pagination">
+                  {% if posts %}
+  
+                    {% if posts.has_previous %}
+                      <li class="page-item ">
+                        <a class="page-link" href="?page={{ posts.next_page_number }}" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                      </li>
+                    {% endif %}
+  
+  
+  
+  
+                      {% for i in posts.paginator.page_range %}
+                      {% if posts.number == i %}
+                    <li class="page-item"><a class="page-link active" href="#">{{1}}</a></li>
+  
+  
+                      {% else %}
+  
+                      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+  
+                    {% if posts.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ posts.next_page_number }}" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </li>
+                    {% endif %}
+  
+                  {% endif %}
+                </ul>
+              </nav>
+            </div>
+            <div class="sidebar col-lg-4">
+              <div class="input-group">
+                <div class="form-outline">
+                  <input id="search-input" type="search" id="form1" class="form-control" placeholder="search" />
+                </div>
+                <button id="search-button" type="button" class="btn dark">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+  
+              <div class="sidebar-category">
+                <h4>We take care of your business</h4>
+                <a href="/marketplace">MarketPlace <img style="width: 20px; margin-left: 20px;" src="static/img/icon/arrow-right-icon.svg" alt=""></a>
+                <div class="category">
+                  {% for item in page_obj %}
+                  <div class="category-item">
+                    <img class="center" height='80px' width="auto" src="{{item.Dis_image.url}}" alt="">
+                    <h6 class="category-title">{{item.name}}</h6>
+                    <p> {% if item.discount_price %}
+                      <span class="mr-1">
+                          <del>{{item.price}}</del>
+                      </span>
+                      <span>{{item.discount_price}}</span>
+                      {% else%}
+                      <span>{{item.price}}</span>
+                      {% endif %}</p>
+                    <a href=""><img style="width: 20px;" src="img/icon/arrow-right-icon.svg" alt=""></a>
+                  </div>
+                  
+                  {% endfor %}
+                </div>
+              </div>
+              
+              <div class="recent-posts my-5">
+                <h4>Past Articles</h4>
+                <a href="">All category 
+                  <img style="width: 20px; margin-left: 20px;" src="static/img/icon/arrow-right-icon.svg" alt=""></a>
+              <div class="latest-articles-wrapper">
+                {% for past in past %}
+                <div class="article">
+                  <div class="arcticle-photo"><img src="{{past.image.url}}" alt=""></div>
+                  <div class="article-text">
+                  <a href="{{past.get_absolute_url}}"><h5 class="title">{{past.title}}</h5></a>
+                  <p class="article-meta"><img src="static/img/icon/calendar.svg" alt="">
+                    <span class="data text-muted">{{past.publish_date}}</span></p>
+                  <p>{{past.content|safe|truncatewords:10|urlize}} </p>
+                  </div>
+                </div>
+                {% endfor %}
+               
+              </div>       
+            </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <!-- Footer -->
+{% endblock content %}

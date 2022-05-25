@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}| Update Post{% endblock %}
+{% load account %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container">
+    <div class="row mt-5 pt-5">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        
+        
+        
+        </div>
+          <div>
+              <h3>Update Post</h3>
+            <form method="post" class="" enctype="multipart/form-data">{% csrf_token %}
+              {{ form|crispy }}
+              <div class="text-center">
+                {% if not post.publish_date %}
+                  <a class="btn btn-primary m-2" href="{% url 'blog:post_approve' pk=post.pk %}">Publish Post <i class="fas fa-check-circle"></i></a>
+                  {% endif %}
+              <button type="submit m-2" class="btn btn-dark" ><i class="fas fa-edit"></i>
+              Update
+              </button>
+              <a class="btn btn-danger" href="{% url 'blog:PostDelete' pk=post.pk  %}">Delete <i class="fas fa-trash-alt"></i></a>
+              </div>
+          </form>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock content %}
